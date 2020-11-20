@@ -11,6 +11,10 @@ const errorhandler = require('errorhandler');
 // config mongoose's promise to global promise
 mongoose.promise = global.Promise;
 
+//models and schemas
+require('./models/Users');
+require('./config/passport');
+
 // config isproduction variable
 const isProduction = process.env.NODE_ENV === 'production';
 
