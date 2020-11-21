@@ -1,70 +1,65 @@
-
-// npm packages
-const express = require("express");
+  
+const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const errorhandler = require('errorhandler');
+const errorHandler = require('errorhandler');
 
-// config mongoose's promise to global promise
+//Configure mongoose's promise to global promise
 mongoose.promise = global.Promise;
 
-//models and schemas
-require('./models/Users');
-require('./config/passport');
-
-// config isproduction variable
+//Configure isProduction variable
 const isProduction = process.env.NODE_ENV === 'production';
 
-// init app
+//Initiate our app
 const app = express();
 
-// config the app
+//Configure our app
 app.use(cors());
 app.use(require('morgan')('dev'));
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static("public"));
-app.use(session({secret:'passport-tutorial',cookie:{maxAge:60000},resave:false,saveUninitialized:false}));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
-
-if(!isProduction){
-  app.use(errorhandler());
+if(!isProduction) {
+  app.use(errorHandler());
 }
 
-// config mongoose
-mongoose.connect('mongodb://localhost/passport-tutorial',{useUnifiedTopology:true,useNewUrlParser:true});
-mongoose.set('debug',true);
+//Configure Mongoose
+mongoose.connect('mongodb://localhost/passport-tutorial');
+mongoose.set('debug', true);
 
+//Models & routes
+require('./models/Users');
+require('./config/passport');
+app.use(require('./routes'));
 
-// error handler and middleware
-if(!isProduction){
-  app.use((err,req,res)=>{
+//Error handlers & middlewares
+if(!isProduction) {
+  app.use((err, req, res) => {
     res.status(err.status || 500);
 
     res.json({
-      errors:{
-        message:err.message,
-        error:err,
-      }
-    })
-  })
+      errors: {
+        message: err.message,
+        error: err,
+      },
+    });
+  });
 }
 
-app.use((err,req,res)=>{
+app.use((err, req, res) => {
   res.status(err.status || 500);
 
   res.json({
-    errors:{
+    errors: {
       message: err.message,
-      error:{},
-    }
-  })
-})
+      error: {},
+    },
+  });
+});
 
-
-// listen for requests :)
-const port = parseInt(process.env.PORT) || 3000;
-app.listen(port,()=> console.log(`Listening on port ${port}`));
+app.listen(8000, () => console.log('Server running on http://localhost:8000/'));

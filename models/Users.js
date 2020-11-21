@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const jwt = require('express-jwt');
+const jwt = require('jsonwebtoken');
 
 const { Schema } = mongoose;
 
@@ -21,11 +21,18 @@ UserSchema.methods.validatePassword = function(password){
     return this.hash === hash;
 }
 
-return jwt.sign({
-    email:this.email,
-    id:this._id,
-    exp:parseInt(expirationDate.getTime() / 1000, 10),
-}, 'secret');
+UserSchema.methods.generateJWT = function() {
+    const today = new Date();
+    const expirationDate = new Date(today);
+    expirationDate.setDate(today.getDate() + 60);
+  
+    return jwt.sign({
+      email: this.email,
+      id: this._id,
+      exp: parseInt(expirationDate.getTime() / 1000, 10),
+    }, 'secret');
+  }
+
 
 UserSchema.methods.toAuthJSON = function(){
     return{
