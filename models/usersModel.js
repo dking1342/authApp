@@ -10,16 +10,41 @@ const { genPassword } = require('./../utils/usersUtil');
 const createUser = (credentials) => {
     return new Promise((resolve,reject)=>{
         let { username, password } = credentials;
-        let pw = genPassword(password);
-        let { salt, hash } = pw;
 
-        User.create({username, hash, salt},(err,user)=>{
-            if(err){
-                reject({msg:"error",error:err});
-            } else {
-                resolve(user);
-            }
-        })
+        let usernameRegex = /^[a-z][^\W_]{4,14}$/i;
+        let passwordRegex = /^(?=[^a-z]*[a-z])(?=\D*\d)[^:&.~\s]{5,20}$/;
+
+        // ****Explanation for username regex
+        // [a-z]    the first letter
+        // [^\W_]   equivalent to [a-zA-Z0-9]
+
+        // ****Explanation for password regex
+        // (?=..)    is a lookahead that don't consume characters but only check
+        // (?=[^a-z]*[a-z]) check if there is at least 1 lower case letter 
+        // (?=\D*\d)   check if there is at least 1 digit
+        // [^:&.~\s]  a character class that exclude all the characters you don't want
+
+        if(usernameRegex.test(username) && passwordRegex.test(password)){
+            User.findOne({username:username},(err,docs)=>{
+                if(err) throw err;
+                if(!docs){
+                    let pw = genPassword(password);
+                    let { salt, hash } = pw;
+
+                    User.create({username, hash, salt},(err,user)=>{
+                        if(err){
+                            reject({msg:"error",status:err});
+                        } else {
+                            resolve({msg:'success',status:user});
+                        }
+                    })
+                } else {
+                    reject({msg:'error',status:'user exists'})
+                }
+            })
+        } else {
+            reject({msg:'error',status:'not valid'})
+        }
     }).then(res => {
         return res;
     }).catch(err => {
@@ -27,36 +52,7 @@ const createUser = (credentials) => {
     });
 }
 
-const findAuth = (username,password) => {
-    return new Promise((resolve,reject)=>{
-
-        User.where({username:username}).findOne((err,user)=>{
-            if(err){
-                // reject(done(null,false));
-                reject({msg:'error',status:'mongo error', user:null});
-            } else if(!user){
-                // reject(done(null,false));
-                reject({msg:'error',status:'no user found',user:null})
-            } else {
-                const isValid = validPassword(password, user.hash, user.salt);
-                
-                if(isValid){
-                    // return done(null,user);
-                    resolve({msg:'success', status:'logged in',user:user})
-                } else {
-                    // return done(null, false);
-                    resolve({msg:'error',status:'password incorrect',user:user});
-                }
-            }
-        })
-    }).then(res => {
-        return res;
-    }).catch(err => {
-        return err;
-    })
-}
 
 module.exports = {
     createUser,
-    findAuth
 }

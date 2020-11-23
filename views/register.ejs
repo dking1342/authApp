@@ -8,32 +8,36 @@
     <!-- Font Awesome script -->
     <script src="https://kit.fontawesome.com/9e65d56683.js"></script>
     <!-- Page style sheet -->
-    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="/styles/formViews.css">
     <title>Register</title>
   </head>
   <body>
 
     <div class="container">
-      <h1>Register</h1>
-
+      
       <nav>
-          <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/register">Register</a></li>
-              <li><a href="/logout">Logout</a></li>
-              <li><a href="/landing">Landing</a></li>
-          </ul>
+        <a href="/">Home</a>
+        <a href="/register">Register</a>
+        <a href="/login">Login</a>
+        <a href="/landing">Landing</a>
+        <a href="/logout">Logout</a>
       </nav>
+      
+      <section>
 
-      <p>Form</p>
-      <form action="/register" method="POST">
-        <label for="username">Username</label>
-        <input type="text" name="username">
-        <label for="password">Password</label>
-        <input type="password" name="password">
-        <input type="submit" value="Sumbit">
-      </form>
+        <form action="/register" method="POST">
+          <h2>Register</h2>
+          <label for="username">Username</label>
+          <input type="text" name="username" required>
+          <label for="password">Password</label>
+          <input type="password" name="password" required>
+          <input type="submit" value="Sumbit">
+        </form>
+      </section>
+
+      <footer>
+        &copy; 2020 Kavooce
+      </footer>
     </div>
 
 

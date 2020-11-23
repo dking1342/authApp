@@ -6,7 +6,6 @@ const Users = require('./../models/usersModel');
 // @route   GET /
 const getHomepage = (req,res) => {
     res.render('index',{});
-    console.log('ping');
     res.end();
 }
 
@@ -23,6 +22,20 @@ const postLogin = (err,req,res,next) => {
     if(err) next(err);
 }
 
+// @des     Failed login attempt
+// @route   GET /login-failure
+const getFailedLogin = (req,res) => {
+    res.render('login-failure',{});
+    res.end();
+}
+
+// @des     Failed register attempt
+// @route   GET /register-failure
+const getFailedRegister = (req,res) => {
+    res.render('register-failure',{});
+    res.end();
+}
+
 // @des     Gets the register view
 // @route   GET /register
 const getRegister = (req,res) => {
@@ -36,9 +49,13 @@ const makeRegister = async (req,res) => {
     const credentials = req.body;
     const user = await Users.createUser(credentials);
 
-    console.log('controller',user);
-    res.redirect('/');
-    res.end();
+    if(user.msg === 'error'){
+        res.render('register-failure',{});
+        res.end();
+    } else {
+        res.render('landing',{});
+        res.end();
+    }
 }
 
 // @des     User logs out of the site/app
@@ -60,5 +77,7 @@ module.exports = {
     getRegister,
     makeRegister,
     getLogout,
-    getLanding
+    getLanding,
+    getFailedLogin,
+    getFailedRegister
 }
