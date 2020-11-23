@@ -1,28 +1,32 @@
 
 const express = require('express');
-const app = express();
 const router = express.Router();
-const { getHomepage, getLogin, getRegister } = require('./../controllers/usersController');
-  
+const passport = require('passport');
+const { isAuth } = require('./authMiddleware');
 
-// scripts and styles routes
-router.get('/public/styles/style.css',(req,res)=> res.sendFile(`${__dirname}/public/styles/style.css`));
-router.get('/public/scripts/script.js',(req,res)=> res.sendFile(__dirname + "/public/scripts/script.js"));
-
+const { getHomepage, getLogin, postLogin, getRegister, makeRegister, getLogout, getLanding } = require('./../controllers/usersController');
 
 // routes
-// no auth needed
-router.get('/',(req,res)=> getHomepage(req,res));
-router.get('/login',(req,res)=> getLogin(req,res));
-router.get('/register',(req,res)=> getRegister(req,res));
+router.get('/', (req,res)=> getHomepage(req,res));
 
+router.route('/login')
+    .get((req,res)=> getLogin(req,res))
+    .post(passport.authenticate("local",{failureRedirect:"/",successRedirect:"/landing"}))
+
+router.route('/register')
+    .get((req,res)=> getRegister(req,res))
+    .post((req,res)=> makeRegister(req,res))
+
+router.route('/landing')
+    .get( isAuth, (req,res)=> getLanding(req,res))
+
+router.route('/logout')
+    .get((req,res) => getLogout(req,res))
 
 
 
 // error handling for bad route requests
 router.use((req,res,next)=> res.status(404).render('404',{}));
-
-
 
 module.exports = {
     router
