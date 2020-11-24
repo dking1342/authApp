@@ -52,18 +52,8 @@ const getRegister = (req,res) => {
 // @route   POST /register
 const makeRegister = async (req,res,next) => {
     const credentials = req.body;
-    const users = await Users.createUser(credentials);
-
-    let user = req.loggedInMongoose;
-    if(users.msg === 'error'){
-        res.render('register-failure',{user});
-        res.end();
-    } else {
-        console.log('register false');
-        res.redirect('/landing');
-        // getLanding(req,res);
-        // next();
-    }
+    await Users.createUser(credentials);
+    next();
 }
 
 // @des     User logs out of the site/app
@@ -76,9 +66,24 @@ const getLogout = (req,res) => {
 // @des     Landing page after login success
 // @route   GET /landing
 const getLanding = (req,res) => {
-
     let user = req.loggedInMongoose;
     res.render('landing',{user});
+    res.end();
+}
+
+// @des     About page view
+// @route   GET /about
+const getAbout = (req,res) => {
+    let user = req.loggedInMongoose;
+    res.render('about',{user});
+    res.end();
+}
+
+// @des     Strategies view
+// @route   GET /strategies
+const getStrategies = (req,res) => {
+    let user = req.loggedInMongoose;
+    res.render('strategies',{user});
     res.end();
 }
 
@@ -91,5 +96,7 @@ module.exports = {
     getLogout,
     getLanding,
     getFailedLogin,
-    getFailedRegister
+    getFailedRegister,
+    getAbout,
+    getStrategies
 }

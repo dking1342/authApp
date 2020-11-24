@@ -48,12 +48,16 @@ app.use(passport.session());
 
 // optional
 app.use((req,res,next)=>{
-  // console.log(req.session.hasOwnProperty(passport));
-  let isLoggedIn = req.session.passport;
-  let user;
-  (isLoggedIn) ? req.loggedInMongoose = true : req.loggedInMongoose = false;
-  console.log('server',req.loggedInMongoose);
-  next();
+  let isLoggedIn;
+  if(req.session.passport === undefined){ 
+    isLoggedIn = req.session.passport;
+    (isLoggedIn) ? req.loggedInMongoose = true : req.loggedInMongoose = false;
+    next();
+  } else{
+    isLoggedIn = req.session.passport.user;
+    (isLoggedIn) ? req.loggedInMongoose = true : req.loggedInMongoose = false;
+    next();
+  }
 })
 
 app.use(router);
