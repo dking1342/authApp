@@ -21,7 +21,7 @@ router.route('/register-failure')
 
 router.route('/register')
     .get((req,res)=> getRegister(req,res))
-    .post((req,res)=> makeRegister(req,res))
+    .post((req,res,next)=> makeRegister(req,res,next))
 
 router.route('/landing')
     .get( isAuth, (req,res)=> getLanding(req,res))
@@ -32,7 +32,10 @@ router.route('/logout')
 
 
 // error handling for bad route requests
-router.use((req,res,next)=> res.status(404).render('404',{}));
+router.use((req,res,next)=> {
+    let user = req.loggedInMongoose;
+    res.status(404).render('404',{user});
+});
 
 module.exports = {
     router

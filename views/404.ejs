@@ -14,15 +14,19 @@
   <body>
 
     <div class="container">
-      <h1>404</h1>
 
-      <nav>
-        <a href="/">Home</a>
-        <a href="/register">Register</a>
-        <a href="/login">Login</a>
-        <a href="/landing">Landing</a>
-        <a href="/logout">Logout</a>
-      </nav>
+      <% if(!user) { %>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/register">Register</a>
+          <a href="/login">Login</a>
+        </nav>
+      <% } else { %>
+        <nav>
+          <a href="/landing">Landing</a>
+          <a href="/logout">Logout</a>
+        </nav>        
+      <% } %>
 
       <section>
         <img src="https://www.vippng.com/png/full/375-3750100_404-404-png.png" height="200" alt="top logo">

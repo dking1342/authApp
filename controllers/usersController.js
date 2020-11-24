@@ -5,14 +5,16 @@ const Users = require('./../models/usersModel');
 // @des     Gets the homepage view
 // @route   GET /
 const getHomepage = (req,res) => {
-    res.render('index',{});
+    let user = req.loggedInMongoose;
+    res.render('index',{user});
     res.end();
 }
 
 // @des     Gets the login view
 // @route   GET /login
 const getLogin = (req,res) => {
-    res.render('login',{});
+    let user = req.loggedInMongoose;
+    res.render('login',{user});
     res.end();
 }
 
@@ -25,36 +27,42 @@ const postLogin = (err,req,res,next) => {
 // @des     Failed login attempt
 // @route   GET /login-failure
 const getFailedLogin = (req,res) => {
-    res.render('login-failure',{});
+    let user = req.loggedInMongoose;
+    res.render('login-failure',{user});
     res.end();
 }
 
 // @des     Failed register attempt
 // @route   GET /register-failure
 const getFailedRegister = (req,res) => {
-    res.render('register-failure',{});
+    let user = req.loggedInMongoose;
+    res.render('register-failure',{user});
     res.end();
 }
 
 // @des     Gets the register view
 // @route   GET /register
 const getRegister = (req,res) => {
-    res.render('register',{});
+    let user = req.loggedInMongoose;
+    res.render('register',{user});
     res.end();
 }
 
 // @des     User registers to site
 // @route   POST /register
-const makeRegister = async (req,res) => {
+const makeRegister = async (req,res,next) => {
     const credentials = req.body;
-    const user = await Users.createUser(credentials);
+    const users = await Users.createUser(credentials);
 
-    if(user.msg === 'error'){
-        res.render('register-failure',{});
+    let user = req.loggedInMongoose;
+    if(users.msg === 'error'){
+        res.render('register-failure',{user});
         res.end();
     } else {
-        res.render('landing',{});
-        res.end();
+        console.log('register false');
+        res.redirect('/landing');
+        // getLanding(req,res);
+        // next();
     }
 }
 
@@ -65,8 +73,12 @@ const getLogout = (req,res) => {
     res.redirect('/');
 }
 
+// @des     Landing page after login success
+// @route   GET /landing
 const getLanding = (req,res) => {
-    res.render('landing',{});
+
+    let user = req.loggedInMongoose;
+    res.render('landing',{user});
     res.end();
 }
 

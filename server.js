@@ -35,10 +35,9 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    ttl:86400,
-    // cookie: {
-    //     maxAge: 86400
-    // }
+    cookie: {
+        maxAge: 86400
+    }
 }));
 
 
@@ -48,10 +47,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // optional
-// app.use((req,res,next)=>{
-//   console.log(req.session, req.user,req.session.passport);
-//   next();
-// })
+app.use((req,res,next)=>{
+  // console.log(req.session.hasOwnProperty(passport));
+  let isLoggedIn = req.session.passport;
+  let user;
+  (isLoggedIn) ? req.loggedInMongoose = true : req.loggedInMongoose = false;
+  console.log('server',req.loggedInMongoose);
+  next();
+})
 
 app.use(router);
 
