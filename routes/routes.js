@@ -2,12 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { isAuth } = require('./authMiddleware');
 
 const { getHomepage, getLogin, getFailedLogin,getFailedRegister, getRegister, makeRegister, getLogout, getLanding, getAbout, getStrategies } = require('./../controllers/usersController');
 
 // routes with no need of authentication
-router.get('/', (req,res)=> getHomepage(req,res));
+router.get('/', (req,res)=> getHomepage(req,res))
 
 router.route('/login')
     .get((req,res)=> getLogin(req,res))
@@ -22,17 +21,17 @@ router.get('/login-failure', (req,res)=> getFailedLogin(req,res));
 router.get('/register-failure', (req,res)=> getFailedRegister(req,res));
 
 // routes needing authentication
-router.get('/landing', isAuth, (req,res) => getLanding(req,res));
-router.get('/about', isAuth, (req,res) => getAbout(req,res));
-router.get('/strategies', isAuth, (req,res) => getStrategies(req,res));
+router.get('/landing',  (req,res) => getLanding(req,res));
+router.get('/about',  (req,res) => getAbout(req,res));
+router.get('/strategies',  (req,res) => getStrategies(req,res));
 router.get('/logout', (req,res,next)=>getLogout(req,res,next))
 
 
 
 
 // error handling for bad route requests
-router.use((req,res,next)=> {
-    let user = req.loggedInMongoose;
+router.use((req,res)=> {
+    let user = req.isAuthenticated();
     res.status(404).render('404',{user});
 });
 

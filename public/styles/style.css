@@ -33,8 +33,8 @@ body{
   box-shadow: 
     inset 5px 5px 10px rgba(0,0,0,0.5),
     -5px -5px 10px rgba(255,255,255,0.5),
-    inset -5px -5px 10px rgba(255,255,255,0.5),
-    5px 5px 10px rgba(0,0,0,0.5);
+    inset -5px -5px 10px rgba(0,0,0,0.5),
+    5px 5px 10px rgba(255,255,255,0.5);
   background-image: repeating-radial-gradient(circle at top, rgba(224, 194, 224,0.1) 200px,transparent 1000px, rgba(255,255,255,0.1) 10px);
   grid-template-areas: 
   'n n n n n n n n n n'

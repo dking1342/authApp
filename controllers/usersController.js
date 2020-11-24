@@ -1,11 +1,12 @@
 
+const passport = require('passport');
 // future imports include data from models folder
 const Users = require('./../models/usersModel');
 
 // @des     Gets the homepage view
 // @route   GET /
 const getHomepage = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('index',{user});
     res.end();
 }
@@ -13,7 +14,7 @@ const getHomepage = (req,res) => {
 // @des     Gets the login view
 // @route   GET /login
 const getLogin = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('login',{user});
     res.end();
 }
@@ -27,7 +28,7 @@ const postLogin = (err,req,res,next) => {
 // @des     Failed login attempt
 // @route   GET /login-failure
 const getFailedLogin = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('login-failure',{user});
     res.end();
 }
@@ -35,7 +36,7 @@ const getFailedLogin = (req,res) => {
 // @des     Failed register attempt
 // @route   GET /register-failure
 const getFailedRegister = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('register-failure',{user});
     res.end();
 }
@@ -43,7 +44,7 @@ const getFailedRegister = (req,res) => {
 // @des     Gets the register view
 // @route   GET /register
 const getRegister = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('register',{user});
     res.end();
 }
@@ -66,7 +67,7 @@ const getLogout = (req,res) => {
 // @des     Landing page after login success
 // @route   GET /landing
 const getLanding = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('landing',{user});
     res.end();
 }
@@ -74,7 +75,7 @@ const getLanding = (req,res) => {
 // @des     About page view
 // @route   GET /about
 const getAbout = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('about',{user});
     res.end();
 }
@@ -82,7 +83,7 @@ const getAbout = (req,res) => {
 // @des     Strategies view
 // @route   GET /strategies
 const getStrategies = (req,res) => {
-    let user = req.loggedInMongoose;
+    let user = req.isAuthenticated();
     res.render('strategies',{user});
     res.end();
 }

@@ -40,28 +40,38 @@ app.use(session({
     }
 }));
 
-
 // passport authentication
 require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
-// optional
+// regulates access based on auth and route
 app.use((req,res,next)=>{
-  let isLoggedIn;
-  if(req.session.passport === undefined){ 
-    isLoggedIn = req.session.passport;
-    (isLoggedIn) ? req.loggedInMongoose = true : req.loggedInMongoose = false;
-    next();
-  } else{
-    isLoggedIn = req.session.passport.user;
-    (isLoggedIn) ? req.loggedInMongoose = true : req.loggedInMongoose = false;
-    next();
+
+  // paths that will reject auth access
+  const unAuthPath = ['/','/login','/register'];
+
+  if(req.isAuthenticated()){
+
+      if(!unAuthPath.includes(req.path)){
+          next();
+      } else {
+          req.logout();
+          res.redirect('/landing');
+      }
+  } else {
+
+      if(unAuthPath.includes(req.path)){
+          next()
+      } else {
+          req.logout();
+          res.redirect('/');
+      }
   }
-})
+});
 
+// middleware to access the routes
 app.use(router);
-
 
 // server init
 const PORT = 3000 || process.env.PORT;
