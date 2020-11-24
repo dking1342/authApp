@@ -1,4 +1,6 @@
 <h1>Authentication Demo App</h1>
+<h2>Status</h2>
+<p>Completed</p>
 <h2>Main Technologies and Packages</h2>
 <ul>
     <li>PassportJS (local-strategy)</li>
