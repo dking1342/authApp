@@ -1,15 +1,11 @@
-<h1>Authentication Demo App</h1>
-<h2>Status</h2>
-<p>Completed</p>
-<h2>Main Technologies and Packages</h2>
-<ul>
-    <li>PassportJS (local-strategy)</li>
-    <li>NodeJS</li>
-    <li>Express and Express Session</li>
-    <li>Mongoose and MongoDB</li>
-    <li>Connect-Mongo</li>
-    <li>EJS</li>
-</ul>
+<h1>NodeJS App using PassportJS (local-strategy)</h1>
+<h2>Prerequisites</h2>
+<a href="http://www.passportjs.org/">PassportJS</a>
+<a href="https://nodejs.org/en/">NodeJS</a>
+<a href="https://expressjs.com/">Express</a>
+<a href="https://mongoosejs.com/">Mongoose</a>
+<a href="https://www.mongodb.com/">MongoDB</a>
+<a href="https://ejs.co/">EJS</a>
 <h2>Goals</h2>
 <p>
 The goal of this repo is to demonstrate how an web application with PassportJS, using the local-strategy, can be made and used.
