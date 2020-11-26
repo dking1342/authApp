@@ -20,15 +20,24 @@ This repo provides and example in how to setup a NodeJS application wherein Pass
 <p>
 Follow the instructions below:
 </p>
+
 <code>
-  $mkdir demo </br>
-  $cd demo </br>
-  $git clone https://github.com/dking1342/authApp.git </br>
+
+```
+$mkdir demo
+$cd demo
+$git clone https://github.com/dking1342/authApp.git
+```
+
 </code>
 <p>
 Next use npm to install all the dependencies
 </p>
-<code>
-  $npm install
-</code>
 
+<code>
+  
+```
+$npm install
+```
+
+</code>
