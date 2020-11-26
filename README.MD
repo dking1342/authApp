@@ -71,3 +71,133 @@ In the routes folder you will see <code>routes.js</code> which documents all the
   
   As you will notice, the function will render a template with some data. The views are made with EJS and the data is coming from the models folder. As seen, the <code>user</code> variable is used to authenticate a user and output a boolean. This is neccessary for the navbar used in each view. The incoming data will help determine whether or not the authenticated navbar is used or not.
 </p>
+<h4>Models & Database Config</h4>
+<p>
+  The modesl folder only has one file which is <code>userModel.js</code>. In this file, it imports the configuration done with the MongoDB server. The <code>usersdb.js</code> file completes this configuration as seen below:
+  
+  ```
+  const mongoose = require('mongoose');
+  const { Schema } = require('mongoose');
+  require('dotenv').config();
+
+  // mongoose server init
+  const conn = process.env.DB_STRING;
+  const options = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true
+  };
+
+  // connection
+  const connection = mongoose.createConnection(conn,options);
+
+  // schema
+  const UserSchema = new Schema({
+      username: String,
+      hash: String,
+      salt:String,
+  });
+
+  // model
+  const User = connection.model('User',UserSchema);
+
+  // export connection
+  module.exports = {
+      connection
+  };
+  ```
+  
+As seen in this code block, the schema has a username (which will eventually be used in the PassportJS config file), hash and salt. The hash and salt fields are part of the encryption methodology used by the npm package <code>crypto</code>.  
+</p>
+<p>
+  Once the model has access to the MongoDB database, it will insert new users that register with the app. The function that creates a new user into the database also has a bit of regex validation to ensure the username and password meet the desired criteria as seen below:
+  
+  ```
+        let usernameRegex = /^[a-z][^\W_]{4,14}$/i;
+        let passwordRegex = /^(?=[^a-z]*[a-z])(?=\D*\d)[^:&.~\s]{5,20}$/;
+
+        // ****Explanation for username regex
+        // [a-z]    the first letter
+        // [^\W_]   equivalent to [a-zA-Z0-9]
+
+        // ****Explanation for password regex
+        // (?=..)    is a lookahead that don't consume characters but only check
+        // (?=[^a-z]*[a-z]) check if there is at least 1 lower case letter 
+        // (?=\D*\d)   check if there is at least 1 digit
+        // [^:&.~\s]  a character class that exclude all the characters you don't want
+  ```
+
+</p>
+<h4>Views</h4>
+<p>
+  The view folder contains the views that are available in this app. These views were made using EJS. The most notable dynamic content is the navbar which is determined as mentioned above. The navbar will be different whether or not the user is authenticated or not.
+  
+  ```
+      <% if(!user) { %>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/register">Register</a>
+          <a href="/login">Login</a>
+        </nav>
+      <% } else { %>
+        <nav>
+          <a href="/landing">Landing</a>
+          <a href="/about">About</a>
+          <a href="/strategies">Strategies</a>
+          <a href="/logout">Logout</a>
+        </nav>        
+      <% } %>
+  ```
+
+</p>
+<p>
+Apart from traditional types of views, there is a 404 view for routes not mentioned in the <code>routes.js</code> file. It also has a <code>/register-failure</code> and <code>/login-failure</code> when a user is rejected on either of those forms with the register or login view.
+</p>
+<p>
+The public folder contains the styles and scripts for the front end. The front end has no such javascript file, it only has css files for a simple stying of each view.
+</p>
+<h4>Passport & Crypto<h4>
+<p>
+According to Passport's documentation, 
+</p>
+<cite>
+Passport is authentication middleware for Node. It is designed to serve a singular purpose: authenticate requests. When writing modules, encapsulation is a virtue, so Passport delegates all other functionality to the application. This separation of concerns keeps code clean and maintainable, and makes Passport extremely easy to integrate into an application.
+<cite>
+<p>  
+It includes many different strategies to authenticate. In this app, we use the local-strategy strategy. This strategy is used for username and password.  
+</p>
+<p>
+  In the config folder there is a file called <code>passport.js</code> which contains the configuration needed. The code block is seen in the Passport documentation and already has it being used for a MongoDB database.
+</p>
+<p>
+Passport takes in a username and password. However, the username and password are passed through a file in the utils folder called <code>usersUtil.js</code>. In this file the username and password as passed through some functions that utilize the crypto package making it suitable for being encrypted.
+  </p>
+  
+  ```
+  const crypto = require('crypto');
+
+  const genPassword = (password) => {
+    const salt = crypto.randomBytes(32).toString("hex");
+    const genHash = crypto
+      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .toString("hex");
+    return {
+      salt: salt,
+      hash: genHash,
+    };
+    }
+
+    const validPassword = (password, hash, salt) => {
+      const hashVerify = crypto
+        .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+        .toString("hex");
+      return hash === hashVerify;
+    };
+
+  ```
+  
+ <h2>Conclusion</h2>
+ <p>
+ This repo has demonstrated how you can build an NodeJS app using the local-strategy offered by PassportJS to authenticate users of your app or website. There are some moving parts, but overall it accomplishes the goal. Please feel free to navigate around the app to see how the final product.
+ </p>
