@@ -21,23 +21,17 @@ This repo provides and example in how to setup a NodeJS application wherein Pass
 Follow the instructions below:
 </p>
 
-<code>
-
 ```
 $mkdir demo
 $cd demo
 $git clone https://github.com/dking1342/authApp.git
 ```
 
-</code>
 <p>
 Next use npm to install all the dependencies
 </p>
 
-<code>
-  
 ```
 $npm install
 ```
 
-</code>
