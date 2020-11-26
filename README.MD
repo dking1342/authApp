@@ -161,9 +161,9 @@ The public folder contains the styles and scripts for the front end. The front e
 <p>
 According to Passport's documentation, 
 </p>
-<cite>
-Passport is authentication middleware for Node. It is designed to serve a singular purpose: authenticate requests. When writing modules, encapsulation is a virtue, so Passport delegates all other functionality to the application. This separation of concerns keeps code clean and maintainable, and makes Passport extremely easy to integrate into an application.
-<cite>
+
+<i>Passport is authentication middleware for Node. It is designed to serve a singular purpose: authenticate requests. When writing modules, encapsulation is a virtue, so Passport delegates all other functionality to the application. This separation of concerns keeps code clean and maintainable, and makes Passport extremely easy to integrate into an application.
+</i>
 <p>  
 It includes many different strategies to authenticate. In this app, we use the local-strategy strategy. This strategy is used for username and password.  
 </p>
