@@ -1,0 +1,23 @@
+<app-header></app-header>
+<h1>Login</h1>
+<form id="form" (submit)="loginUser($event)">
+    <input 
+        type="text" 
+        name="username" 
+        placeholder="Username" 
+        id="username" 
+        [(ngModel)]="username"
+    >
+    <input 
+        type="password" 
+        name="password" 
+        placeholder="Password" 
+        id="password" 
+        [(ngModel)]="password"
+    >
+    <input 
+        type="submit" 
+        value="Submit"
+    >
+    <a routerLink="/register">Not registered?</a>
+</form>

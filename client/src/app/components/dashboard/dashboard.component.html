@@ -1,0 +1,7 @@
+<app-header></app-header>
+<h1>Dashboard</h1>
+<app-blog
+    *ngFor="let item of blogArray; index as i"
+    [item] = "item"
+    (onShowItem)="showItem(item)"
+></app-blog>

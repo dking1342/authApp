@@ -1,0 +1,11 @@
+<nav *ngIf="!loginState">
+    <a routerLink="/">Home</a>
+    <a routerLink="/login">Login</a>
+    <a routerLink="/register">Register</a>
+</nav>
+<nav *ngIf="loginState">
+    <a routerLink="/">Home</a>
+    <a routerLink="/admin">Admin</a>
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/logout">Logout</a>
+</nav>
